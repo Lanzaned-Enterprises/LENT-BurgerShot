@@ -8,16 +8,47 @@ local PedCreated = {}
 local ZoneSpawned = false 
 local ZoneCreated = {}
 
+local BlipSpawned = false
+local SpawnedBlips = {}
+
 -- [[ Resource Metadata ]] --
 AddEventHandler('onResourceStop', function(resource)
     if resource == GetCurrentResourceName() then
         DeleteAllPeds()
         DeleteZones()
+        RemoveBlips()
     end
 end)
 
 -- [[ Net Events ]] --
-RegisterNetEvent('LENT-BurgerShot:Client:OpenMenu', function()
+RegisterNetEvent('LENT-BurgerShot:Client:SelectionMenu', function()
+    local SelectionMenu = {}
+
+    SelectionMenu[#SelectionMenu + 1] = {
+        isMenuHeader = true,
+        header = Config.ResourceSettings['Language']['SelectionHeader'],
+        txt = Config.ResourceSettings['Language']['SelectionText'],
+        icon = Config.ResourceSettings['SelectionIcon'],
+    }
+
+    for k, _ in pairs(Config.ProductList) do
+        SelectionMenu[#SelectionMenu + 1] = {
+            header = Config.ProductList[k].Name,
+            params = {
+                event = 'LENT-BurgerShot:Client:OpenMenu',
+                args = {
+                    SelectedOption = Config.ProductList[k].Tag,
+                },
+            },
+        }
+    end
+
+    exports['qb-menu']:openMenu(SelectionMenu)
+end)
+
+RegisterNetEvent('LENT-BurgerShot:Client:OpenMenu', function(data)
+    local SelectedOption = data.SelectedOption
+    
     local MenuList = {}
 
     MenuList[#MenuList + 1] = {
@@ -25,18 +56,20 @@ RegisterNetEvent('LENT-BurgerShot:Client:OpenMenu', function()
         header = Config.ResourceSettings['Language']['Header'],
         txt = Config.ResourceSettings['Language']['Text'],
         icon = Config.ResourceSettings['MenuIcon'],
+        
     }
 
-    for k, _ in pairs(Config.ProductList) do
+    for k, _ in pairs(Config.ProductList[SelectedOption]['Products']) do
         MenuList[#MenuList + 1] = {
-            header = Config.ProductList[k].ItemName,
-            txt = 'The price of this product is $' .. Config.ProductList[k].Price .. ' Dollars',
+            header = Config.ProductList[SelectedOption]['Products'][k].ItemName,
+            txt = 'The price of this product is $' .. Config.ProductList[SelectedOption]['Products'][k].Price .. ' Dollars',
+            icon = Config.ProductList[SelectedOption]['Products'][k].Item,
             params = {
                 event = 'LENT-BurgerShot:Client:SendPurchaseData',
                 args = {
-                    itemName = Config.ProductList[k].ItemName,
-                    item = Config.ProductList[k].Item,
-                    price = Config.ProductList[k].Price,
+                    itemName = Config.ProductList[SelectedOption]['Products'][k].ItemName,
+                    item = Config.ProductList[SelectedOption]['Products'][k].Item,
+                    price = Config.ProductList[SelectedOption]['Products'][k].Price,
                 },
             },
         }
@@ -97,6 +130,12 @@ function DeleteZones()
     end
 end
 
+function RemoveBlips()
+    for i, BlipCreated in pairs(SpawnedBlips) do
+        RemoveBlip(BlipCreated)
+    end
+end
+
 -- [[ Threads ]] --
 CreateThread(function()
     for k, v in pairs(Config.PedsList) do
@@ -130,7 +169,7 @@ CreateThread(function()
                 options = {
                     {
                         type = 'client',
-                        event = 'LENT-BurgerShot:Client:OpenMenu',
+                        event = 'LENT-BurgerShot:Client:SelectionMenu',
                         icon = v["icon"],
                         label = v["text"],
                     },
@@ -192,7 +231,7 @@ CreateThread(function()
                 options = { 
                     {
                         type = 'client',
-                        event = 'LENT-BurgerShot:Client:OpenMenu',
+                        event = 'LENT-BurgerShot:Client:SelectionMenu',
                         icon = v["Icon"],
                         label = v["Label"], 
                     },
@@ -202,5 +241,23 @@ CreateThread(function()
         end
 
         ZoneSpawned = true
+    end
+end)
+
+CreateThread(function()
+    if not BlipSpawned then
+        for blip, _ in pairs(Config.Blips) do
+            local BlipCreated = AddBlipForCoord(Config.Blips[blip]["Coords"]["x"], Config.Blips[blip]["Coords"]["y"], Config.Blips[blip]["Coords"]["z"])
+            SetBlipSprite(BlipCreated, Config.Blips[blip]["BlipId"])
+            SetBlipDisplay(BlipCreated, 2)
+            SetBlipScale(BlipCreated, 0.8)
+            SetBlipColour(BlipCreated, Config.Blips[blip]["BlipColor"])
+            SetBlipAlpha(BlipCreated, 256)
+            SetBlipAsShortRange(BlipCreated, true)
+            BeginTextCommandSetBlipName("STRING")
+            AddTextComponentString(Config.Blips[blip]["BlipName"])
+            EndTextCommandSetBlipName(BlipCreated)
+            table.insert(SpawnedBlips, BlipCreated)
+        end
     end
 end)

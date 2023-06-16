@@ -8,10 +8,28 @@ Config.QBCoreSettings = {
 
 Config.ResourceSettings = {
     ['Language'] = {
+        ['SelectionHeader'] = "Burger Shot!",
+        ['SelectionText'] = "It's bleedin' tasty!",
         ['Header'] = "Burger Shot!",
         ['Text'] = "It's bleedin' tasty!",
     },
+    ['SelectionIcon'] = "fa-solid fa-burger",
     ['MenuIcon'] = "fa-solid fa-burger"
+}
+
+Config.Blips = {
+    ['BurgershotSandyShores'] = {
+        ['Coords'] = vector4(1577.4, 3745.87, 34.43, 116.92),
+        ['BlipId'] = 106,
+        ['BlipColor'] = 6,
+        ['BlipName'] = 'Burger Shot'
+    },
+    ['BurgershotLosSantos'] = {
+        ['Coords'] = vector4(-1179.23, -885.01, 13.83, 315.85),
+        ['BlipId'] = 106,
+        ['BlipColor'] = 6,
+        ['BlipName'] = 'Burger Shot'
+    },
 }
 
 Config.PedsList = {
@@ -121,19 +139,74 @@ Config.ZoneList = {
 }
 
 Config.ProductList = {
-    ['GreenBobaTea'] = {
-        ['ItemName'] = 'Green Boba Tea',
-        ['Item'] = 'greenbobatea',
-        ['Price'] = 7,
+    ['ColdDrinks'] = {
+        ['Name'] = "Cold Drinks",
+        ['Tag'] = 'ColdDrinks',
+        ['Products'] = {
+            ['CokeCherry'] = {
+                ['ItemName'] = 'Cherry Coke',
+                ['Item'] = 'coke-cherry',
+                ['Price'] = 7,
+            },
+            ['CokeCinnamon'] = {
+                ['ItemName'] = 'Cinnamon Flavoured Coke',
+                ['Item'] = 'coke-cinnamon',
+                ['Price'] = 7,
+            },
+            ['CokeCoffee'] = {
+                ['ItemName'] = 'Coffee Flavoured Coke',
+                ['Item'] = 'coke-coffee',
+                ['Price'] = 7,
+            },
+            ['CokeDiet'] = {
+                ['ItemName'] = 'Diet Coke',
+                ['Item'] = 'coke-diet',
+                ['Price'] = 7,
+            },
+            ['CokeMango'] = {
+                ['ItemName'] = 'Mango Flavoured Coke',
+                ['Item'] = 'coke-mango',
+                ['Price'] = 7,
+            },
+            ['CokePeach'] = {
+                ['ItemName'] = 'Peach Flavoured Coke',
+                ['Item'] = 'coke-peach',
+                ['Price'] = 7,
+            },
+        }
     },
-    ['CokeCherry'] = {
-        ['ItemName'] = 'Cherry Coke',
-        ['Item'] = 'coke-cherry',
-        ['Price'] = 10,
+    ['HotDrinks'] = {
+        ['Name'] = 'Hot Drinks',
+        ['Tag'] = 'HotDrinks',
+        ['Products'] = {
+            ['NormalCoffee'] = {
+                ['ItemName'] = 'Coffee',
+                ['Item'] = 'coffee',
+                ['Price'] = 5,
+            },
+        }
     },
-    ['CokeCoffee'] = {
-        ['ItemName'] = 'Coffee Coke',
-        ['Item'] = 'coke-coffee',
-        ['Price'] = 15,
+    ['Burgers'] = {
+        ['Name'] = 'Burgers',
+        ['Tag'] = 'Burgers',
+        ['Products'] = {
+            ['BaconBurger'] = {
+                ['ItemName'] = 'Burger With Bacon',
+                ['Item'] = 'cb_bacon_burger',
+                ['Price'] = 12,
+            },
+            ['CheeseBurger'] = {
+                ['ItemName'] = 'Burger With Cheese',
+                ['Item'] = 'cb_cheeseburger',
+                ['Price'] = 12,
+            },
+        }
     },
+    -- ['Combos'] = {
+        -- ['Name'] = 'Combo Deals',
+        -- ['Tag'] = 'Combos',
+        -- ['Products'] = {
+            
+        -- }
+    -- },
 }
