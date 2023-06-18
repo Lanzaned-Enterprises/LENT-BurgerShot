@@ -6,7 +6,7 @@ games { 'gta5' }
 author 'Izumi S. <https://discordapp.com/users/871877975346405388>'
 description 'Lananed Development | BurgerShot Store'
 discord 'https://discord.lanzaned.com'
-github 'https://github.com/Lanzaned-Enterprises/'
+github 'https://github.com/Lanzaned-Enterprises/LENT-BurgerShot'
 docs 'https://docs.lanzaned.com/'
 
 -- [[ Version ]] --

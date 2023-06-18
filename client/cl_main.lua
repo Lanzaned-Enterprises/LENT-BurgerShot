@@ -48,7 +48,6 @@ end)
 
 RegisterNetEvent('LENT-BurgerShot:Client:OpenMenu', function(data)
     local SelectedOption = data.SelectedOption
-    
     local MenuList = {}
 
     MenuList[#MenuList + 1] = {
@@ -56,64 +55,111 @@ RegisterNetEvent('LENT-BurgerShot:Client:OpenMenu', function(data)
         header = Config.ResourceSettings['Language']['Header'],
         txt = Config.ResourceSettings['Language']['Text'],
         icon = Config.ResourceSettings['MenuIcon'],
-        
     }
 
-    for k, _ in pairs(Config.ProductList[SelectedOption]['Products']) do
-        MenuList[#MenuList + 1] = {
-            header = Config.ProductList[SelectedOption]['Products'][k].ItemName,
-            txt = 'The price of this product is $' .. Config.ProductList[SelectedOption]['Products'][k].Price .. ' Dollars',
-            icon = Config.ProductList[SelectedOption]['Products'][k].Item,
-            params = {
-                event = 'LENT-BurgerShot:Client:SendPurchaseData',
-                args = {
-                    itemName = Config.ProductList[SelectedOption]['Products'][k].ItemName,
-                    item = Config.ProductList[SelectedOption]['Products'][k].Item,
-                    price = Config.ProductList[SelectedOption]['Products'][k].Price,
+    if (SelectedOption == 'Combos') then
+        for k, _ in pairs(Config.ProductList[SelectedOption]['Products']) do
+            MenuList[#MenuList + 1] = {
+                header = Config.ProductList[SelectedOption]['Products'][k].ProductName,
+                txt = 'The price of this product is $' .. Config.ProductList[SelectedOption]['Products'][k].Price .. ' Dollars',
+                icon = Config.ProductList[SelectedOption]['Products'][k].Item,
+                params = {
+                    event = 'LENT-BurgerShot:Client:SendPurchaseData',
+                    args = {
+                        combo = true,
+                        ProductName = Config.ProductList[SelectedOption]['Products'][k].ProductName,
+                        ItemList = Config.ProductList[SelectedOption]['Products'][k].ItemList,
+                        price = Config.ProductList[SelectedOption]['Products'][k].Price,
+                    },
                 },
-            },
-        }
+            }
+        end
+    else
+        for k, _ in pairs(Config.ProductList[SelectedOption]['Products']) do
+            MenuList[#MenuList + 1] = {
+                header = Config.ProductList[SelectedOption]['Products'][k].ItemName,
+                txt = 'The price of this product is $' .. Config.ProductList[SelectedOption]['Products'][k].Price .. ' Dollars',
+                icon = Config.ProductList[SelectedOption]['Products'][k].Item,
+                params = {
+                    event = 'LENT-BurgerShot:Client:SendPurchaseData',
+                    args = {
+                        ProductName = Config.ProductList[SelectedOption]['Products'][k].Item,
+                        itemName = Config.ProductList[SelectedOption]['Products'][k].ItemName,
+                        item = Config.ProductList[SelectedOption]['Products'][k].Item,
+                        price = Config.ProductList[SelectedOption]['Products'][k].Price,
+                    },
+                },
+            }
+        end
     end
 
     exports['qb-menu']:openMenu(MenuList)
 end)
 
 RegisterNetEvent('LENT-BurgerShot:Client:SendPurchaseData', function(data)
-    local item = data.item
+    local ProductName = data.ProductName
     local price = data.price
-    local itemName = data.itemName
 
-    local BurgerShotInput = exports['qb-input']:ShowInput({
-        header = itemName,
-        submitText = 'Purchase',
-        inputs = {
-            {
-                text = "Amount",
-                name = "burgershotamount", 
-                type = "number", 
-                isRequired = true, 
-            },
-            {
-                text = "Bill Type",
-                name = "burgershotbilltype",
-                type = "radio",
-                options = {
-                    { value = "cash", text = "Cash" },
-                    { value = "bank", text = "Bank" },
+    if data.combo then
+        local itemList = data.ItemList
+        
+
+        local BurgerShotInput = exports['qb-input']:ShowInput({
+            header = ProductName,
+            submitText = 'Purchase',
+            inputs = {
+                {
+                    text = "Bill Type",
+                    name = "burgershotbilltype",
+                    type = "radio",
+                    options = {
+                        { value = "cash", text = "Cash" },
+                        { value = "bank", text = "Bank" },
+                    },
                 },
-            },
-        }
-    })
+            }
+        })
 
-    if BurgerShotInput then
-        local amount = BurgerShotInput.burgershotamount
-        local billtype = BurgerShotInput.burgershotbilltype
-        TriggerServerEvent('LENT-BurgerShot:Server:GiveItem', item, itemName, price, amount, billtype)
+        if BurgerShotInput then
+            local billtype = BurgerShotInput.burgershotbilltype
+            TriggerServerEvent('LENT-BurgerShot:Server:GiveMenu', itemList, price, billtype)
+        end
+    else
+        local item = data.item
+        local itemName = data.itemName
+
+        local BurgerShotInput = exports['qb-input']:ShowInput({
+            header = ProductName,
+            submitText = 'Purchase',
+            inputs = {
+                {
+                    text = "Amount",
+                    name = "burgershotamount",
+                    type = "number",
+                    isRequired = true,
+                },
+                {
+                    text = "Bill Type",
+                    name = "burgershotbilltype",
+                    type = "radio",
+                    options = {
+                        { value = "cash", text = "Cash" },
+                        { value = "bank", text = "Bank" },
+                    },
+                },
+            }
+        })
+
+        if BurgerShotInput then
+            local amount = BurgerShotInput.burgershotamount
+            local billtype = BurgerShotInput.burgershotbilltype
+            TriggerServerEvent('LENT-BurgerShot:Server:GiveItem', item, itemName, price, amount, billtype)
+        end
     end
 end)
 
 -- [[ Functions ]] --
-function DeleteAllPeds() 
+function DeleteAllPeds()
     if pedSpawned then
         for _, v in pairs(PedCreated) do
             DeletePed(v)
@@ -131,40 +177,40 @@ function DeleteZones()
 end
 
 function RemoveBlips()
-    for i, BlipCreated in pairs(SpawnedBlips) do
+    for _, BlipCreated in pairs(SpawnedBlips) do
         RemoveBlip(BlipCreated)
     end
 end
 
 -- [[ Threads ]] --
 CreateThread(function()
-    for k, v in pairs(Config.PedsList) do
-        if pedSpawned then 
-            return 
+    for _, _ in pairs(Config.PedsList) do
+        if pedSpawned then
+            return
         end
-    
+
         for k, v in pairs(Config.PedsList) do
-            if not PedCreated[k] then 
-                PedCreated[k] = {} 
+            if not PedCreated[k] then
+                PedCreated[k] = {}
             end
-    
+
             local current = v["Ped"]
             current = type(current) == 'string' and joaat(current) or current
             RequestModel(current)
-    
+
             while not HasModelLoaded(current) do
                 Wait(0)
             end
-    
+
             -- The coords + heading of the Ped
             PedCreated[k] = CreatePed(0, current, v["Coords"].x, v["Coords"].y, v["Coords"].z-1, v["Coords"].w, false, false)
-            
+
             -- Start the scneario in a basic loop
             TaskStartScenarioInPlace(PedCreated[k], v["scenario"], true)
             FreezeEntityPosition(PedCreated[k], true)
             SetEntityInvincible(PedCreated[k], true)
             SetBlockingOfNonTemporaryEvents(PedCreated[k], true)
-            
+
             exports['qb-target']:AddTargetEntity(PedCreated[k], {
                 options = {
                     {
@@ -176,7 +222,7 @@ CreateThread(function()
                 },
                 distance = 2.0
             })
-    
+
             -- Clothing for MP Characters
             if v["MPClothing"] then
                 SetPedComponentVariation(PedCreated[k], 2, v["hair"], 0, 0)
@@ -205,13 +251,13 @@ CreateThread(function()
                 SetPedEyeColor(PedCreated[k], v['eye_COLOR'])
             end
         end
-    
+
         pedSpawned = true
     end
 end)
 
 CreateThread(function()
-    for k, v in pairs(Config.ZoneList) do
+    for _, _ in pairs(Config.ZoneList) do
         if ZoneSpawned then
             return
         end

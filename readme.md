@@ -6,14 +6,15 @@
 - PolyZone
 - Renewed-Banking + Renewed qb-phone
 
-## Disclaimer
-- At the moment vehicles are sold at set prices in `shared/sh_config.lua`
-- Player must own the vehicle for them to be able to sell it.
-    - The vehicle will be removed from the database
+## Features
+- Will check inventory status to not go over the set limit!
+    - Will check both weight & Slots to see if the item can fit
+- Will automatically check the balance to check if the player has enough money
+- Will generate a bank statement if using `Renewed-Banking`
 
 ## How to install
 - Drag & Drop the resource in your resources folder
-    - Do some config you know!~
+    - Read over [Setup](./setup.md) for the best experience
 - Ensure the resource in your `server.cfg` or `resources.cfg`
 
 ## Issues

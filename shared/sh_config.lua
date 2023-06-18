@@ -3,10 +3,12 @@ Config = {}
 Config.QBCoreSettings = {
     ['Notify'] = 'ps', -- qb, ps
     ['Phone'] = 'qb', -- qb, gks, qs, npwd
-    ['MaxSlots'] = 41,
+    ['MaxSlots'] = 41, -- Should match inventory config!
+    ['MaxInventoryWeight'] = 240000, -- Should match inventory config!
 }
 
 Config.ResourceSettings = {
+    ['Renewed'] = true,
     ['Language'] = {
         ['SelectionHeader'] = "Burger Shot!",
         ['SelectionText'] = "It's bleedin' tasty!",
@@ -143,6 +145,7 @@ Config.ProductList = {
         ['Name'] = "Cold Drinks",
         ['Tag'] = 'ColdDrinks',
         ['Products'] = {
+            -- Coka Cola
             ['CokeCherry'] = {
                 ['ItemName'] = 'Cherry Coke',
                 ['Item'] = 'coke-cherry',
@@ -173,6 +176,48 @@ Config.ProductList = {
                 ['Item'] = 'coke-peach',
                 ['Price'] = 7,
             },
+            -- Dr. Pepper
+            ['DrPepperCherry'] = {
+                ['ItemName'] = 'Cherry Flavoured Dr. Pepper',
+                ['Item'] = 'drpepper-cherry',
+                ['Price'] = 7,
+            },
+            ['DrPepperCola'] = {
+                ['ItemName'] = 'Cola Flavoured Dr. Pepper',
+                ['Item'] = 'drpepper-cola',
+                ['Price'] = 7,
+            },
+            ['DrPepperVanilla'] = {
+                ['ItemName'] = 'Vanilla Flavoured Dr. Pepper',
+                ['Item'] = 'drpepper-vanilla',
+                ['Price'] = 7,
+            },
+            -- Fanta
+            ['FantaGrape'] = {
+                ['ItemName'] = 'Grape Flavoured Fanta',
+                ['Item'] = 'fanta-grape',
+                ['Price'] = 7,
+            },
+            ['FantaOrange'] = {
+                ['ItemName'] = 'Orange Flavoured Fanta',
+                ['Item'] = 'fanta-orange',
+                ['Price'] = 7,
+            },
+            ['FantaPeach'] = {
+                ['ItemName'] = 'Peach Flavoured Fanta',
+                ['Item'] = 'fanta-peach',
+                ['Price'] = 7,
+            },
+            ['FantaPineapple'] = {
+                ['ItemName'] = 'Pineapple Flavoured Fanta',
+                ['Item'] = 'fanta-pineapple',
+                ['Price'] = 7,
+            },
+            ['FantaStrawberry'] = {
+                ['ItemName'] = 'Strawberry Flavoured Fanta',
+                ['Item'] = 'fanta-strawberry',
+                ['Price'] = 7,
+            },
         }
     },
     ['HotDrinks'] = {
@@ -200,13 +245,47 @@ Config.ProductList = {
                 ['Item'] = 'cb_cheeseburger',
                 ['Price'] = 12,
             },
+
+            ['BleederBurger'] = {
+                ['ItemName'] = 'Bleeder',
+                ['Item'] = 'burger-bleeder',
+                ['Price'] = 12,
+            },
+            ['MoneyShotBurger'] = {
+                ['ItemName'] = 'Moneyshot',
+                ['Item'] = 'burger-moneyshot',
+                ['Price'] = 12,
+            },
+            ['TorpedoBurger'] = {
+                ['ItemName'] = 'Torpedo',
+                ['Item'] = 'burger-torpedo',
+                ['Price'] = 12,
+            },
+            ['HeartstopperBurger'] = {
+                ['ItemName'] = 'Heartstopper',
+                ['Item'] = 'burger-heartstopper',
+                ['Price'] = 24,
+            },
+            ['MeatFreeBurger'] = {
+                ['ItemName'] = 'Vegan Burger',
+                ['Item'] = 'burger-meatfree',
+                ['Price'] = 6,
+            },
         }
     },
-    -- ['Combos'] = {
-        -- ['Name'] = 'Combo Deals',
-        -- ['Tag'] = 'Combos',
-        -- ['Products'] = {
-            
-        -- }
-    -- },
+    ['Combos'] = {
+        ['Name'] = 'Combo Deals',
+        ['Tag'] = 'Combos',
+        ['Products'] = {
+            ['HeartstopperMenu'] = {
+                ['ProductName'] = "Heartstopper Menu",
+                ['ItemList'] = {
+                    ['Drink'] = 'burger-softdrink',
+                    ['Burger'] = 'burger-heartstopper',
+                    ['Fries'] = 'burger-fries',
+                },
+                ['Price'] = 32,
+            },
+        }
+    },
 }
